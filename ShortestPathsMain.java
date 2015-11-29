@@ -34,19 +34,23 @@ d[s] = 0
 */
 
 public class ShortestPathsMain {
-	
 
-	ArrayList<ArrayList<HashMap<String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>>>> masterGrid; 
+	ArrayList<ArrayList<Cell>> masterGrid;
 
-/*
-	public void recalculate (int u, int v, int w) {
+	public ShortestPathsMain (int h, int w, int k) {
 
-		if (d[v] > d[u] + w (u,v)) {
-			d[v] = d[u]  + w (u,v);
-			p[v] = u; 
+		masterGrid = new ArrayList<ArrayList<Cell>>(); 
+
+		// initializing the rows of the master grid 
+		for (int i = 0; i < h; i++) {
+			ArrayList<Cell> cols = new ArrayList<Cell>();
+			for (int j = 0; j < w; j++) {
+				Cell init = new Cell(); 
+				cols.add(init);
+			}
+			masterGrid.add(cols);
 		}
-	}
-*/
+	} 
 
 	public int getWeight (int i, int j, String hashKey, int adjVertIndex) {
 
@@ -64,24 +68,26 @@ public class ShortestPathsMain {
 
 	public void addVertToCell (int i, int j, String hashKey) {
 
-		ArrayList adj = new ArrayList();
-		System.out.println(Integer.toString(i) + " " + Integer.toString(j));  
+		AdjacentList adj = new AdjacentList();
+		//System.out.println(Integer.toString(i) + " " + Integer.toString(j));  
 		masterGrid.get(i).get(j).put(hashKey, adj); 
 
 	}
 
-	public void addWeights (BufferedReader br, int w, int h, int k) {
+	public void addWeights (BufferedReader br, int h, int w, int k) {
 
-		w --;
 		h --;
-
-		String widthIndex = String.valueOf(w); 
-		String heightIndex = String.valueOf(h);
-		String numVerts = String.valueOf(k);
-		String line; 
+		w --;
+	 
+		String heightIndex = Integer.toString(h);
+		String widthIndex = Integer.toString(w);
+		String numVerts = Integer.toString(k);
+		String line;
+		String q = "q";  
+		Character qChar = q.charAt(0);
 
 		try {
-  			while ((line = br.readLine()) != null && line != "queries") {
+  			while ((line = br.readLine()) != null && line.charAt(0) != qChar) {
 			
 				String[] spliced = line.split("\\s+");
 				String vert1 = spliced[0];
@@ -89,11 +95,11 @@ public class ShortestPathsMain {
 				String edge = spliced[2];
 				int edgeWeight = Integer.parseInt(edge); 
 
-				String[] internal = spliced[0].split(".");
-				String heightChar =  Character.toString(internal[0].charAt(1));
-				String widthChar = internal[1];
-				String vertNum = internal[2];  
+				String[] internal = vert1.split("\\.");
+				System.out.println(vert1);
 
+				String heightChar =  Character.toString(internal[0].charAt(1));
+				String widthChar = internal[1]; 
 
 				int heightCharIndex = Integer.parseInt(heightChar);
 				int widthCharIndex = Integer.parseInt(widthChar); 
@@ -143,7 +149,8 @@ public class ShortestPathsMain {
 	    }
 	}
 
-	public void initializeGrid (int w, int h, int k) {
+	public void initializeGrid (int h, int w, int k) {
+
 
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
@@ -163,12 +170,12 @@ public class ShortestPathsMain {
 		}
 	}
 
-	public static void printMap (HashMap<String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>> map) {
+	public static void printMap (Cell map) {
 	 Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
-		    Map.Entry <String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>> pair = (Map.Entry<String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>>)it.next();
+		    Map.Entry <String, AdjacentList> pair = (Map.Entry<String, AdjacentList>)it.next();
 		    System.out.print(pair.getKey() + " --->" ); 
-		    ArrayList <AbstractMap.SimpleEntry<String, Integer>> adjVerts = pair.getValue();
+		    AdjacentList adjVerts = pair.getValue();
 		    for (int i = 0; i < adjVerts.size(); i++) {
 		    	System.out.print(" (" + adjVerts.get(i).getKey() + ", " + adjVerts.get(i).getValue() + ")");
 		    }
@@ -177,18 +184,26 @@ public class ShortestPathsMain {
 		}
 	}
 
-	public void printMasterGrid (ArrayList<ArrayList<HashMap<String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>>>> masterGrid, int h, int w, int k) {
+	public void printGrid (ArrayList<ArrayList<Cell>> grid, int h, int w, int k) {
 	
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
-				printMap(masterGrid.get(i).get(j)); 
+				printMap(grid.get(i).get(j)); 
 			}
 		}
 	}
 
-	public static void main (String args[]) {
+	/*
+	public void recalculate (int u, int v, int w) {
 
-		ShortestPathsMain shortestMain = new ShortestPathsMain(); 
+		if (d[v] > d[u] + w (u,v)) {
+			d[v] = d[u]  + w (u,v);
+			p[v] = u; 
+		}
+	}
+*/
+
+	public static void main (String args[]) {
 
 		if (args.length == 0) {
 			System.err.println("USAGE: specify a graph input file as the first command line argument");
@@ -216,14 +231,15 @@ public class ShortestPathsMain {
 	    }
 
 	    String[] spliced = line.split("\\s+"); 
+		
+		int h = Integer.parseInt (spliced[1]); 
+	    int w = Integer.parseInt(spliced[0]);   
+	    int k = Integer.parseInt(spliced[2]);
+	    
+	    ShortestPathsMain shortestMain = new ShortestPathsMain(h, w, k);  
 
-	    int w = Integer.parseInt(spliced[0]);
-	    int h = Integer.parseInt (spliced[1]);  
-	    int k = Integer.parseInt(spliced[1]); 
-
-	    shortestMain.masterGrid = new ArrayList<ArrayList<HashMap<String, ArrayList<AbstractMap.SimpleEntry<String, Integer>>>>>(); 
-	    shortestMain.initializeGrid(w, h, k); 
-	    shortestMain.addWeights(br, w, h, k); 
-	    shortestMain.printMasterGrid(shortestMain.masterGrid, h, w, k);
+	    shortestMain.initializeGrid(h, w, k); 
+	    shortestMain.addWeights(br, h, w, k); 
+	    shortestMain.printGrid(shortestMain.masterGrid, h, w, k);
 	}
 }

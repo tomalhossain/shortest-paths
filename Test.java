@@ -1,4 +1,3 @@
-import MakeRandomGraph; 
 
 public class Test {
 	
