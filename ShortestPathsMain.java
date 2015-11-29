@@ -76,69 +76,79 @@ public class ShortestPathsMain {
 
 	public void addWeights (BufferedReader br, int h, int w, int k) {
 
+		// String and Integer representations of the grid dimensions
 		h --;
 		w --;
-	 
-		String heightIndex = Integer.toString(h);
-		String widthIndex = Integer.toString(w);
-		String numVerts = Integer.toString(k);
+		
 		String line;
 		String q = "q";  
 		Character qChar = q.charAt(0);
 
 		try {
   			while ((line = br.readLine()) != null && line.charAt(0) != qChar) {
-			
+				
 				String[] spliced = line.split("\\s+");
-				String vert1 = spliced[0];
-				String vert2 = spliced[1];
-				String edge = spliced[2];
+				String vert1 = spliced[0]; 
+				String vert2 = spliced[1]; 
+				String edge = spliced[2]; 
 				int edgeWeight = Integer.parseInt(edge); 
 
 				String[] internal = vert1.split("\\.");
-				System.out.println(vert1);
 
+				// String and integer representations of vertex coordinates
 				String heightChar =  Character.toString(internal[0].charAt(1));
 				String widthChar = internal[1]; 
-
 				int heightCharIndex = Integer.parseInt(heightChar);
 				int widthCharIndex = Integer.parseInt(widthChar); 
 				
 				if (internal.length == 2) {
-					if (heightChar == "0") { 
-						if (widthChar  == "0") {
-							addAdjVert(0, 0, vert1, vert2, edgeWeight); 	 
+					// Adding outer grid points, 4 corners only belong to a only 1 cell while side gird points belong to 2 cells
+					if ((heightCharIndex == 0 || heightCharIndex == h + 1) || (widthCharIndex == 0 || widthCharIndex == w + 1)) {
+						if (heightCharIndex == 0) { 
+							if (widthCharIndex  == 0) {
+								addAdjVert(0, 0, vert1, vert2, edgeWeight); 	 
+							}
+							else if (widthCharIndex  == w + 1) {
+								addAdjVert(0, w, vert1, vert2, edgeWeight); 	 
+							}
+							else {
+								addAdjVert(0, widthCharIndex-1, vert1, vert2, edgeWeight);
+								addAdjVert(0, widthCharIndex, vert1, vert2, edgeWeight); 
+							}	 
 						}
-						else if (widthChar  == widthIndex) {
-							addAdjVert(0, w, vert1, vert2, edgeWeight); 	 
+						else if (heightCharIndex == h + 1) { 
+							if (widthCharIndex  == 0) {
+								addAdjVert(h, 0, vert1, vert2, edgeWeight); 	 
+							}
+							else if (widthCharIndex  == w + 1) {
+								addAdjVert(h, w, vert1, vert2, edgeWeight); 
+							}
+							else {
+								addAdjVert(h, widthCharIndex-1, vert1, vert2, edgeWeight);
+								addAdjVert(h, widthCharIndex, vert1, vert2, edgeWeight); 
+							}	 
 						}
 						else {
-							addAdjVert(0, widthCharIndex-1, vert1, vert2, edgeWeight);
-							addAdjVert(0, widthCharIndex, vert1, vert2, edgeWeight); 
-						}	 
-					}
-					else if (heightChar == heightIndex) { 
-						if (widthChar  == "0") {
-							addAdjVert(h, 0, vert1, vert2, edgeWeight); 	 
+							if (widthCharIndex  == 0) {
+								addAdjVert(heightCharIndex, 0, vert1, vert2, edgeWeight);
+								addAdjVert(heightCharIndex-1, 0, vert1, vert2, edgeWeight); 
+							}
+							else if (widthCharIndex  == w + 1) {
+								addAdjVert(heightCharIndex, w, vert1, vert2, edgeWeight);
+								addAdjVert(heightCharIndex-1, w, vert1, vert2, edgeWeight); 
+							}
 						}
-						else if (widthChar  == widthIndex) {
-							addAdjVert(h, w, vert1, vert2, edgeWeight); 
-						}
-						else {
-							addAdjVert(h, widthCharIndex-1, vert1, vert2, edgeWeight);
-							addAdjVert(h, widthCharIndex, vert1, vert2, edgeWeight); 
-						}	 
 					}
-					else if (widthChar  == "0") {
-						addAdjVert(heightCharIndex, 0, vert1, vert2, edgeWeight);
-						addAdjVert(heightCharIndex-1, 0, vert1, vert2, edgeWeight); 
-					}
-					else if (widthChar  == widthIndex) {
-						addAdjVert(heightCharIndex, w, vert1, vert2, edgeWeight);
-						addAdjVert(heightCharIndex-1, w, vert1, vert2, edgeWeight); 
+				// Adding inner grid points, each of which belongs to 4 cells
+					else {  
+
+						addAdjVert (heightCharIndex, widthCharIndex, vert1, vert2, edgeWeight);
+						addAdjVert (heightCharIndex-1, widthCharIndex, vert1, vert2, edgeWeight);
+						addAdjVert (heightCharIndex, widthCharIndex-1, vert1, vert2, edgeWeight);
+						addAdjVert (heightCharIndex-1, widthCharIndex-1, vert1, vert2, edgeWeight);
 					}
 				}
-
+				// Add all remaining internal cell vertices (each belong to only 1 cell)
 				else {
 					addAdjVert (heightCharIndex, widthCharIndex, vert1, vert2, edgeWeight);
 				}
