@@ -208,20 +208,17 @@ public class ShortestPathsMain {
 		}
 	}
 
-	public void dijkstra (ArrayList<ArrayList<Cell>> grid, String source, String goal, int h, int w, int k) {
+	public AbstractMap.SimpleEntry<ArrayList<String>, Integer> dijkstra (ArrayList<ArrayList<Cell>> grid, String source, String goal, int h, int w, int k, int y, int z) {
 		// Constructs a priority queue in which items are vertex name strings and 
 		// priorities are discovered distances from the given source vertex. 
-
-		//for (int i = 0; i < h; i++) {
-			//for (int k = 0; k < w; k++) {
 
 				String [] parents = new String [2*k]; //WATCH OUT
 				PriorityQueue<String,Integer> priority = new PriorityQueue<String,Integer>(); 
 				
 				Map<String, Integer> visited = new HashMap(priority.getSize()); 
 
-				//Cell cell = grid.get(i).get(k);
-				Cell cell = grid.get(0).get(0);
+				Cell cell = grid.get(y).get(z);
+				//Cell cell = grid.get(0).get(0);
 				Iterator it = cell.section.entrySet().iterator();
 				while (it.hasNext()) {
 					Map.Entry <String, AdjacentList> pair = (Map.Entry<String, AdjacentList>)it.next();
@@ -240,6 +237,8 @@ public class ShortestPathsMain {
 
 				}
 
+				int ind = itemMap.get(source); 
+				parents[ind] = null; 
 
 				priority.getMap(); 
 
@@ -247,13 +246,13 @@ public class ShortestPathsMain {
 
 				while (priority.getSize() > 0) {
 					String curr = priority.peekTop(); 
-					System.out.println("currstring = " + curr);
+					//System.out.println("currstring = " + curr);
 					Integer currPri = new Integer(priority.getPriority(curr));
-					System.out.println("CURRPRI = " + currPri);
+					//System.out.println("CURRPRI = " + currPri);
 					
 					Character vertTypeChar = curr.charAt(0);
 					String currVertType = Character.toString(vertTypeChar);
-					System.out.println("currVertType = " + "'" + currVertType + "'" );
+					//System.out.println("currVertType = " + "'" + currVertType + "'" );
 				
 					if (curr != goal) { 
 
@@ -267,18 +266,18 @@ public class ShortestPathsMain {
 							
 							Character adjVertTypeChar = adjCurr.charAt(0);
 							String adjVertType = Character.toString(adjVertTypeChar);
-							System.out.println("adjVertType = " + "'" + adjVertType + "'" );
-							System.out.println("adjvert = "  + adjCurr);
+							//System.out.println("adjVertType = " + "'" + adjVertType + "'" );
+							//System.out.println("adjvert = "  + adjCurr);
 
 							Character rowChar = adjCurr.charAt(1);
 							String row = Character.toString(rowChar);
 							int rowInt = Integer.parseInt(row);
-							System.out.println("rowInt = " + rowInt);
+							//System.out.println("rowInt = " + rowInt);
 
 							Character colChar = adjCurr.charAt(3);
 							String col = Character.toString(colChar);
 							int colInt = Integer.parseInt(col);
-							System.out.println("colInt = " + colInt);
+							//System.out.println("colInt = " + colInt);
 						
 							if (!visited.containsKey(adjCurr))  {
 								
@@ -287,7 +286,7 @@ public class ShortestPathsMain {
 									int dist = entry.getValue();
 									Integer distInt = new Integer(dist);
 									Integer adjCurrPri = new Integer(priority.getPriority(adjCurr));
-									System.out.println("pricurradjbefore = " + adjCurrPri);
+									//System.out.println("pricurradjbefore = " + adjCurrPri);
 									
 									if (adjCurrPri > currPri + distInt) {
 										adjCurrPri = currPri + distInt;
@@ -295,19 +294,19 @@ public class ShortestPathsMain {
 										priority.changePriority(adjCurr, newPri); 
 										parents[itemMap.get(adjCurr)] = curr; 
 									}
-									System.out.println("pricurradjafter = " + adjCurrPri);
+									//System.out.println("pricurradjafter = " + adjCurrPri);
 								}
 
 								else if (currVertType.equals("g")) {
 
-									if (adjVertType.equals("v") && !(row.equals("0") && col.equals("0"))) {
+									if (adjVertType.equals("v") && (rowInt != y || colInt != z)) {
 										continue;
 									}
 									else {
 										int dist = entry.getValue();
 										Integer distInt = new Integer(dist);
 										Integer adjCurrPri = new Integer(priority.getPriority(adjCurr));
-										System.out.println("pricurradj = " + adjCurrPri);
+										//System.out.println("pricurradj = " + adjCurrPri);
 										
 										if (adjCurrPri > currPri + distInt) {
 											adjCurrPri = currPri + distInt;
@@ -315,7 +314,7 @@ public class ShortestPathsMain {
 											priority.changePriority(adjCurr, newPri); 
 											parents[itemMap.get(adjCurr)] = curr; 
 										}
-										System.out.println("pricurradjafter = " + adjCurrPri);
+										//System.out.println("pricurradjafter = " + adjCurrPri);
 									}
 								}
 							}
@@ -325,18 +324,26 @@ public class ShortestPathsMain {
 						break; 
 					}
 					visited.put(priority.removeItem(), currPri);
-					System.out.println(visited);
-					System.out.println("visited-size = " + visited.size());
-					System.out.println("priority-size = " + priority.getSize()); 
+					//System.out.println(visited);
+					//System.out.println("visited-size = " + visited.size());
+					//System.out.println("priority-size = " + priority.getSize()); 
 				}
 				
 				System.out.println("PRINTING THE SHORTEST PATH");
+				// A mapping of pairs of grid vertices in a given cell to the shortest path
+				// that connects said vertices
 
-				while (!goal.equals(source)) {
+				ArrayList<String> path = new ArrayList<String>(); 
+				int shortest = visited.get(goal); 
+
+				while (goal != null) {
 					System.out.println(goal + " = " + visited.get(goal));
-					int goalIndex = itemMap.get(goal); 
+					path.add(goal); 
+					int goalIndex = itemMap.get(goal);
 					goal = parents[goalIndex]; 
 				}
+				AbstractMap.SimpleEntry<ArrayList<String>, Integer> shortestPath = new AbstractMap.SimpleEntry<ArrayList<String>, Integer>(path, shortest); 
+				return shortestPath; 
 			//}
 		//}
 	}
@@ -380,28 +387,53 @@ public class ShortestPathsMain {
 
 	    shortestMain.initializeGrid(h, w, k, distances); 
 	    shortestMain.addWeights(br, h, w, k); 
-	    shortestMain.printGrid(shortestMain.masterGrid, h, w, k);
+	    //shortestMain.printGrid(shortestMain.masterGrid, h, w, k);
 
-	    System.out.println("DONE");
+	    System.out.println("Initializing gridPaths");
+
+		HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<ArrayList<String>, Integer>> gridPaths = new HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<ArrayList<String>, Integer>>();
+		// constructing the grid-graph
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				// for each of the grid points
+				for (int a = 0; a <= 1; a++) {
+					for (int l = 0; l <= 1; l++) {
+						String startPoint = ("g" + Integer.toString(i + a) + "." + Integer.toString(j + l));
+						// determine the shortest path to the other gridpoints 
+						for (int m = 0; m <= 1; m++) {
+							for (int n = 0; n <= 1; n++) {
+								String endPoint = ("g" + Integer.toString(i + m) + "." + Integer.toString(j + n));
+								if (!startPoint.equals(endPoint)) {
+									AbstractMap.SimpleEntry<ArrayList<String>, Integer> shortestPath = shortestMain.dijkstra(shortestMain.masterGrid, startPoint, endPoint, h, w, k, i, j); 
+									AbstractMap.SimpleEntry<String, String> vertexPair = new AbstractMap.SimpleEntry<String, String>(startPoint, endPoint);
+									gridPaths.put(vertexPair, shortestPath); 
+					   			}
+					   		}
+					    }
+				    }
+				}
+				System.out.println("Done with cell " + Integer.toString(j));
+			}
+			System.out.println("Done with row " + Integer.toString(i));
+		}
+		System.out.println(gridPaths); 
 
 		String[] spliced2 = new String [2];
-
+		/*
 	    try {
-			while ((line = br.readLine()) != null) {
-				System.out.println(line);
+			while (!(line = br.readLine()).equals("")) {
+				System.out.println("'" + line + "'");
 				spliced2 = line.split("\\s+");
 				String source = spliced2[0];
 				String goal = spliced2[1];
-				System.out.println(source);
-				System.out.println(goal);
-				shortestMain.dijkstra(shortestMain.masterGrid, source, goal, h, w, k); 
-			}
+				System.out.println("source: " + source + " ---> " + "goal: " + goal);
 
+			}
 	   	}
 	    catch (IOException e) {
 	    	System.out.println("Buffered reader error"); 
 	    }
-	   
+	   */
 	}
 }
 
