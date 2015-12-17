@@ -34,5 +34,12 @@ public class AdjacentList {
 
 	}
 
+	public AbstractMap.SimpleEntry<String,Integer> remove (int index) {
+		return this.adjacent.remove(index);
+	}
+
+	public String toString () {
+		return this.adjacent.toString();  
+	}
 
 }

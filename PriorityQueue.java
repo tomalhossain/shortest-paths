@@ -107,6 +107,10 @@ public class PriorityQueue<K, V extends Comparable<? super V>>
 	return size;
     }
 
+    public Map<K, Integer> getMap() { 
+        return this.itemMap;
+    }
+
     /**
      * Adds an item to this queue.
      *
@@ -255,7 +259,7 @@ public class PriorityQueue<K, V extends Comparable<? super V>>
      * @param index the index in the heap to examine
      * @return the priority of the item there
      */
-    private V getPriority(int index)
+    public V getPriority(int index)
     {
 	return itemHeap.get(index).priority;
     }
@@ -266,7 +270,7 @@ public class PriorityQueue<K, V extends Comparable<? super V>>
      * @param item an item on this queue
      * @return the priority of that item
      */
-    private V getPriority(K item)
+    public V getPriority(K item)
     {
 	int tableLoc = itemMap.get(item);
 	int heapLoc = itemTable.get(tableLoc).heapIndex;
