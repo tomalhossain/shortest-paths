@@ -208,7 +208,7 @@ public class ShortestPathsMain {
 		}
 	}
 
-	public AbstractMap.SimpleEntry<ArrayList<String>, Integer> dijkstra (ArrayList<ArrayList<Cell>> grid, String source, String goal, int h, int w, int k, int y, int z) {
+	public AbstractMap.SimpleEntry<LinkedList<String>,Integer> dijkstra (ArrayList<ArrayList<Cell>> grid, String source, String goal, int h, int w, int k, int y, int z) {
 		// Constructs a priority queue in which items are vertex name strings and 
 		// priorities are discovered distances from the given source vertex. 
 
@@ -329,25 +329,137 @@ public class ShortestPathsMain {
 					//System.out.println("priority-size = " + priority.getSize()); 
 				}
 				
-				System.out.println("PRINTING THE SHORTEST PATH");
+				//System.out.println("PRINTING THE SHORTEST PATH");
 				// A mapping of pairs of grid vertices in a given cell to the shortest path
 				// that connects said vertices
 
-				ArrayList<String> path = new ArrayList<String>(); 
+				LinkedList<String> path = new LinkedList<String>(); 
 				int shortest = visited.get(goal); 
 
 				while (goal != null) {
-					System.out.println(goal + " = " + visited.get(goal));
-					path.add(goal); 
+					//System.out.println(goal + " = " + visited.get(goal));
+					path.addFirst(goal); 
 					int goalIndex = itemMap.get(goal);
 					goal = parents[goalIndex]; 
 				}
-				AbstractMap.SimpleEntry<ArrayList<String>, Integer> shortestPath = new AbstractMap.SimpleEntry<ArrayList<String>, Integer>(path, shortest); 
+				AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = new AbstractMap.SimpleEntry<LinkedList<String>, Integer>(path, shortest); 
 				return shortestPath; 
-			//}
-		//}
 	}
-	// if (currVertType == "v") {
+	
+	public AbstractMap.SimpleEntry<LinkedList<String>,Integer> dijkstra2 (Cell cell, String source, String goal, int h, int w, int k) {
+	// Constructs a priority queue in which items are vertex name strings and 
+	// priorities are discovered distances from the given source vertex. 
+
+			String [] parents = new String [2*k]; //WATCH OUT
+			PriorityQueue<String,Integer> priority = new PriorityQueue<String,Integer>(); 
+			
+			Map<String, Integer> visited = new HashMap(priority.getSize()); 
+
+			Iterator it = cell.section.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry <String, AdjacentList> pair = (Map.Entry<String, AdjacentList>)it.next();
+				//System.out.println(pair.getKey()); 
+			    priority.addItem(pair.getKey(), Integer.MAX_VALUE);
+
+			}
+
+			Map<String, Integer> priorityMap = priority.getMap(); 
+			Map<String, Integer> itemMap = new HashMap(priorityMap.size()); 
+
+			Iterator iterator = priorityMap.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry <String,Integer> pear = (Map.Entry<String,Integer>)iterator.next();
+			    itemMap.put(pear.getKey(), pear.getValue());
+
+			}
+
+			int ind = itemMap.get(source); 
+			parents[ind] = null; 
+
+			priority.getMap(); 
+
+			priority.changePriority(source, 0);
+
+			
+			Integer currPri = 0; 
+			while (priority.getSize() > 0) {
+				String curr = priority.peekTop(); 
+				//System.out.println("currstring = " + curr);
+				currPri = new Integer(priority.getPriority(curr));
+				//System.out.println("CURRPRI = " + currPri);
+				
+				Character vertTypeChar = curr.charAt(0);
+				String currVertType = Character.toString(vertTypeChar);
+				//System.out.println("currVertType = " + "'" + currVertType + "'" );
+			
+				if (curr != goal) { 
+
+					AdjacentList adjList = cell.get(curr);
+					//System.out.println("adjlist = " + adjList);
+					
+					for (int i = 0; i < adjList.size(); i++) {
+						
+						AbstractMap.SimpleEntry <String, Integer> entry = adjList.get(i);
+						String adjCurr = entry.getKey();
+						
+						Character adjVertTypeChar = adjCurr.charAt(0);
+						String adjVertType = Character.toString(adjVertTypeChar);
+						//System.out.println("adjVertType = " + "'" + adjVertType + "'" );
+						//System.out.println("adjvert = "  + adjCurr);
+
+						Character rowChar = adjCurr.charAt(1);
+						String row = Character.toString(rowChar);
+						int rowInt = Integer.parseInt(row);
+						//System.out.println("rowInt = " + rowInt);
+
+						Character colChar = adjCurr.charAt(3);
+						String col = Character.toString(colChar);
+						int colInt = Integer.parseInt(col);
+						//System.out.println("colInt = " + colInt);
+					
+						if (!visited.containsKey(adjCurr))  {
+							
+							int dist = entry.getValue();
+							Integer distInt = new Integer(dist);
+							Integer adjCurrPri = new Integer(priority.getPriority(adjCurr));
+							//System.out.println("pricurradjbefore = " + adjCurrPri);
+							
+							if (adjCurrPri > currPri + distInt) {
+								adjCurrPri = currPri + distInt;
+								int newPri = adjCurrPri.intValue(); 
+								priority.changePriority(adjCurr, newPri); 
+								parents[itemMap.get(adjCurr)] = curr; 
+							}
+						}
+					}
+				}
+				else {
+					break; 
+				}
+				visited.put(priority.removeItem(), currPri);
+				//System.out.println(visited);
+				//System.out.println("visited-size = " + visited.size());
+				//System.out.println("priority-size = " + priority.getSize()); 
+			}
+			visited.put(priority.removeItem(), currPri);
+			//System.out.println(visited);
+			//System.out.println("PRINTING THE SHORTEST PATH");
+			// A mapping of pairs of grid vertices in a given cell to the shortest path
+			// that connects said vertices
+
+			LinkedList<String> path = new LinkedList<String>(); 
+		
+			int shortest = visited.get(goal);
+		
+			while (goal != null) {
+				//System.out.println(goal + " = " + visited.get(goal));
+				path.addFirst(goal); 
+				int goalIndex = itemMap.get(goal);
+				goal = parents[goalIndex]; 
+			}
+			AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = new AbstractMap.SimpleEntry<LinkedList<String>, Integer>(path, shortest); 
+			return shortestPath; 
+	}
 
 	public static void main (String args[]) {
 
@@ -389,10 +501,11 @@ public class ShortestPathsMain {
 	    shortestMain.addWeights(br, h, w, k); 
 	    //shortestMain.printGrid(shortestMain.masterGrid, h, w, k);
 
-	    System.out.println("Initializing gridPaths");
+	    //System.out.println("Initializing gridPaths");
 
-		HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<ArrayList<String>, Integer>> gridPaths = new HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<ArrayList<String>, Integer>>();
-		// constructing the grid-graph
+		HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths = new HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>();
+		
+		// CONSTRUCTING THE GRID-GRAPH
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				// for each of the grid points
@@ -404,7 +517,7 @@ public class ShortestPathsMain {
 							for (int n = 0; n <= 1; n++) {
 								String endPoint = ("g" + Integer.toString(i + m) + "." + Integer.toString(j + n));
 								if (!startPoint.equals(endPoint)) {
-									AbstractMap.SimpleEntry<ArrayList<String>, Integer> shortestPath = shortestMain.dijkstra(shortestMain.masterGrid, startPoint, endPoint, h, w, k, i, j); 
+									AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = shortestMain.dijkstra(shortestMain.masterGrid, startPoint, endPoint, h, w, k, i, j); 
 									AbstractMap.SimpleEntry<String, String> vertexPair = new AbstractMap.SimpleEntry<String, String>(startPoint, endPoint);
 									gridPaths.put(vertexPair, shortestPath); 
 					   			}
@@ -412,28 +525,102 @@ public class ShortestPathsMain {
 					    }
 				    }
 				}
-				System.out.println("Done with cell " + Integer.toString(j));
+				//System.out.println("Done with cell " + Integer.toString(j));
 			}
-			System.out.println("Done with row " + Integer.toString(i));
+			//System.out.println("Done with row " + Integer.toString(i));
 		}
-		System.out.println(gridPaths); 
+		//System.out.println(gridPaths); //GRID PATHS
+
+
+		// CONSTRUCTING THE REDUCTION GRAPH
+		Cell reducedGrid = new Cell (); 
+
+		Iterator iterator = gridPaths.entrySet().iterator();
+		while (iterator.hasNext()) {
+
+			Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> pair = (Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>)iterator.next();
+		    
+			AbstractMap.SimpleEntry<String, String> stringPair = pair.getKey(); 
+			String start = stringPair.getKey(); 
+			String end = stringPair.getValue();
+
+			AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortPath = pair.getValue();
+			LinkedList<String> thePath = shortPath.getKey(); 
+			int dist = shortPath.getValue(); 
+
+			AbstractMap.SimpleEntry <String, Integer> entry = new AbstractMap.SimpleEntry<String, Integer>(end, dist); 
+
+			if (reducedGrid.section.containsKey(start)) {
+				reducedGrid.get(start).add(entry); 
+			}
+
+			else {
+				AdjacentList adj = new AdjacentList();
+				reducedGrid.put(start, adj); 
+			}
+		}
+		//System.out.println("PRINTING REDUCED GRID WITHOUT QUERY VERTS");
+		//printMap(reducedGrid); 
+
+		// ADDING THE SOURCE AND GOAL VERTICES TO THE REDUCED GRAPH
 
 		String[] spliced2 = new String [2];
-		/*
+
+		String source = "";
+		String goal = ""; 
+		
 	    try {
 			while (!(line = br.readLine()).equals("")) {
-				System.out.println("'" + line + "'");
+				//System.out.println("'" + line + "'");
 				spliced2 = line.split("\\s+");
-				String source = spliced2[0];
-				String goal = spliced2[1];
-				System.out.println("source: " + source + " ---> " + "goal: " + goal);
+				source = spliced2[0];
+				goal = spliced2[1];
 
+				//System.out.println("source: " + source + " ---> " + "goal: " + goal);
+
+				for (int q = 0; q < spliced2.length; q++) {
+
+					String point = spliced2[q]; 
+
+					Character rowCharSource = point.charAt(1);
+					String rowSource = Character.toString(rowCharSource);
+					int rowIntSource = Integer.parseInt(rowSource);
+
+					Character colCharSource = point.charAt(3);
+					String colSource = Character.toString(colCharSource);
+					int colIntSource = Integer.parseInt(colSource);
+
+					for (int r = 0; r <= 1; r++) {
+						for (int s =0; s <=1; s++) {
+							String adjGridPoint = ("g" + (rowIntSource + r) + "." + (colIntSource + s));
+							AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = shortestMain.dijkstra(shortestMain.masterGrid, point, adjGridPoint, h, w, k, rowIntSource, colIntSource);
+							
+							int d = shortestPath.getValue(); 
+
+							AbstractMap.SimpleEntry <String, Integer> edge = new AbstractMap.SimpleEntry<String, Integer>(adjGridPoint, d); 
+
+							if (reducedGrid.section.containsKey(point)) {
+								reducedGrid.get(point).add(edge); 
+							}
+
+							else {
+								AdjacentList adj = new AdjacentList();
+								reducedGrid.put(point, adj); 
+							}
+						}
+					}
+				}
 			}
 	   	}
 	    catch (IOException e) {
 	    	System.out.println("Buffered reader error"); 
 	    }
-	   */
+	    //System.out.println("PRINTING REDUCED GRID WITH QUERY VERTS");
+	    //printMap(reducedGrid); 
+	    AbstractMap.SimpleEntry<LinkedList<String>, Integer> finalPath = shortestMain.dijkstra2(reducedGrid, source, goal, h, w, k);
+	    LinkedList<String> finalList = finalPath.getKey(); 
+	    int finalDist = finalPath.getValue(); 
+	    System.out.println(finalDist + " " + finalList); 
 	}
 }
 
