@@ -73,14 +73,14 @@ public class ShortestPathsMain {
 		masterGrid.get(i).get(j).put(hashKey, adj); 
 
 	}
-
+	/*
 	public void addAdjVert2 (HashMap gridPaths, String hashKey, String adjVertex, int weight) {
 
 		Integer weightInteger = new Integer (weight); 
 		AbstractMap.SimpleEntry<String, Integer> pair = new AbstractMap.SimpleEntry<String, Integer>(adjVertex, weightInteger); 
 		gridPaths.get(hashKey).add(pair);
 	}
-	
+	*/
 
 	public void addVertToCell2 (HashMap gridPaths, String hashKey) {
 
@@ -181,11 +181,11 @@ public class ShortestPathsMain {
 	    }
 	}
 
-	public HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> addWeights2 (HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths, String gridVert, int h, int w, int k, int y, int z) {
+	public void addWeights2 (HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths, String gridVert, int h, int w, int k, int y, int z) {
 		//HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths = new HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>();
 		// String and Integer representations of the grid dimensions
-		//h --;
-		//w --;
+		h --;
+		w --;
 
 		// String and integer representations of vertex coordinates
 		String heightChar =  Character.toString(gridVert.charAt(1));
@@ -210,8 +210,8 @@ public class ShortestPathsMain {
 					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + widthChar) , h, w, k, y, z);
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z);  
-					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z); 		 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1);  
+					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1); 		 
 				}	 
 			}
 			else if (heightCharIndex == h + 1) { 
@@ -229,21 +229,21 @@ public class ShortestPathsMain {
 					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y, z); 
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z);
-					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z); 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1);
+					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1); 
 				}	 
 			}
 			else {
 				if (widthCharIndex  == 0) {
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + widthChar) , h, w, k, y, z); 
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y-1, z); 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y-1, z); 
 					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z);
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y, z);  
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z);
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + widthChar) , h, w, k, y, z);  
 				}
 				else if (widthCharIndex  == w + 1) {
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y, z); 
-					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z); 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y-1, z); 
+					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y-1, z); 
 					addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z); 
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z);
 					addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + widthChar) , h, w, k, y, z);   
@@ -252,21 +252,21 @@ public class ShortestPathsMain {
 		}
 		// Adding inner grid points, each of which belongs to 4 cells
 		else {  
-			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z);
-			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y, z);
-			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z);
-			addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z); 
+			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y-1, z-1);
+			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + widthChar) , h, w, k, y-1, z-1);
+			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex - 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y-1, z);
+			addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y-1, z); 
 			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex + 1)) , h, w, k, y, z);
 			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + widthChar) , h, w, k, y, z); 
-			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z);
-			addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z); 
+			addPath(gridPaths, gridVert, ("g" + Integer.toString(heightCharIndex + 1) + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1);
+			addPath(gridPaths, gridVert, ("g" + heightChar + "." + Integer.toString(widthCharIndex - 1)) , h, w, k, y, z-1); 
 		}
-
 	}
 
 	public void addPath (HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths, String source, String goal, int h , int w, int k, int y, int z) {
-		AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = this.dijkstra(this.masterGrid, startPoint, endPoint, h, w, k, y, z); 
-		AbstractMap.SimpleEntry<String, String> vertexPair = new AbstractMap.SimpleEntry<String, String>(startPoint, endPoint);
+		//System.out.println("y : " + y + "  z : " + z); 
+		AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = this.dijkstra(this.masterGrid, source, goal, h, w, k, y, z); 
+		AbstractMap.SimpleEntry<String, String> vertexPair = new AbstractMap.SimpleEntry<String, String>(source, goal);
 		gridPaths.put(vertexPair, shortestPath); 
 	}
 
@@ -300,7 +300,7 @@ public class ShortestPathsMain {
 		    	System.out.print(" (" + adjVerts.get(i).getKey() + ", " + adjVerts.get(i).getValue() + ")");
 		    }
 		    System.out.println(); 
-		    //it.remove(); // avoids a ConcurrentModificationException
+		    
 		}
 	}
 
@@ -449,7 +449,8 @@ public class ShortestPathsMain {
 				AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = new AbstractMap.SimpleEntry<LinkedList<String>, Integer>(path, shortest); 
 				return shortestPath; 
 	}
-	
+
+	// To be run on the Grid Graph
 	public AbstractMap.SimpleEntry<LinkedList<String>,Integer> dijkstra2 (Cell cell, String source, String goal, int h, int w, int k) {
 	// Constructs a priority queue in which items are vertex name strings and 
 	// priorities are discovered distances from the given source vertex. 
@@ -466,7 +467,6 @@ public class ShortestPathsMain {
 			    priority.addItem(pair.getKey(), Integer.MAX_VALUE);
 
 			}
-
 			Map<String, Integer> priorityMap = priority.getMap(); 
 			Map<String, Integer> itemMap = new HashMap(priorityMap.size()); 
 
@@ -479,9 +479,6 @@ public class ShortestPathsMain {
 
 			int ind = itemMap.get(source); 
 			parents[ind] = null; 
-
-			priority.getMap(); 
-
 			priority.changePriority(source, 0);
 
 			
@@ -565,6 +562,16 @@ public class ShortestPathsMain {
 			return shortestPath; 
 	}
 
+	public LinkedList<String> removeDuplicate (LinkedList<String> list) {
+      LinkedList<String> copy = new LinkedList<String>();
+		for (String s : list) {
+	    	if (!copy.contains(s)) {
+	        	copy.add(s);
+	    	}
+	    }
+    return copy;
+	} 
+
 	public static void main (String args[]) {
 
 		if (args.length == 0) {
@@ -609,61 +616,146 @@ public class ShortestPathsMain {
 
 	    // Constructing the Grid Graph
 		HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> gridPaths = new HashMap<AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>();
-		ArrayList<String> gridVerts = new ArrayList<String>(); 
-		Cell reducedGrid = new Cell (); 
+		//ArrayList<String> gridVerts = new ArrayList<String>(); 
+		
 		String gridVert = ""; 
+		int index1 = 0; 
+		int index2 = 0;
 
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				for (int di = 0; di <= 1; di++) {
 					for (int dj = 0; dj <= 1; dj++) {
-						gridVert = "g" + gridRow + "." + gridCol;
+						gridVert = "g" + (i + di) + "." + (j + dj);
 						//gridVerts.add(gridVert); 
-						shortestMain.addVertToCell2(gridPaths, gridVert);
-						shortestMain.addWeights2(gridPaths, gridVerts.get(i), h, w, k, i, j); 
+						//shortestMain.addVertToCell2(gridPaths, gridVert);
+						//System.out.println("ADDED VERT TO CELL : " + ); 
+						index1 = i + di; 
+						index2 = j + dj; 
+						if (index1 == h) {index1 --;} 
+						if (index2 == w) {index2 --;} 
+
+						shortestMain.addWeights2(gridPaths, gridVert, h, w, k, index1, index2); 
+						//System.out.println("ADDED VERT TO CELL : " + gridVert); 
 					}
 				}
 			}
-		}
+		}		
 
-
-		System.out.println(gridPaths); //GRID PATHS
-
-		//CONSTRUCTING THE REDUCTION GRAPH
-				
-		Iterator iterator = gridPaths.entrySet().iterator();
-		while (iterator.hasNext()) {
-
-			Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> pair = (Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>)iterator.next();
-		    
-			AbstractMap.SimpleEntry<String, String> stringPair = pair.getKey(); 
-			String start = stringPair.getKey(); 
-			String end = stringPair.getValue();
-
-			AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortPath = pair.getValue();
-			LinkedList<String> thePath = shortPath.getKey(); 
-			int dist = shortPath.getValue(); 
-
-			AbstractMap.SimpleEntry <String, Integer> entry = new AbstractMap.SimpleEntry<String, Integer>(end, dist); 
-
-			if (reducedGrid.section.containsKey(start)) {
-				reducedGrid.get(start).add(entry); 
-			}
-
-			else {
-				AdjacentList adj = new AdjacentList();
-				reducedGrid.put(start, adj); 
-			}
-		}
-		
-
-		//System.out.println("PRINTING REDUCED GRID WITHOUT QUERY VERTS");
-		printMap(reducedGrid); 
-
-		// ADDING THE SOURCE AND GOAL VERTICES TO THE REDUCED GRAPH
+		// ADDING THE SOURCE AND GOAL VERTICES TO THE GRID GRAPH
 
 		String[] spliced2 = new String [2];
+		String source = "";
+		String goal = ""; 
+		
+	    try {
+			while (!(line = br.readLine()).equals("")) {
+				//System.out.println("'" + line + "'");
+				spliced2 = line.split("\\s+");
+				source = spliced2[0];
+				goal = spliced2[1];
 
+				//System.out.println("source: " + source + " ---> " + "goal: " + goal);
+
+				for (int q = 0; q < spliced2.length; q++) {
+
+					String point = spliced2[q]; 
+
+					Character rowCharPoint = point.charAt(1);
+					String rowPoint = Character.toString(rowCharPoint);
+					int rowIntPoint = Integer.parseInt(rowPoint);
+
+					Character colCharPoint = point.charAt(3);
+					String colPoint = Character.toString(colCharPoint);
+					int colIntPoint = Integer.parseInt(colPoint);
+
+					for (int r = 0; r <= 1; r++) {
+						for (int s =0; s <=1; s++) {
+							String adjGridPoint = ("g" + (rowIntPoint + r) + "." + (colIntPoint + s));
+							shortestMain.addPath (gridPaths, point, adjGridPoint, h , w, k, rowIntPoint, colIntPoint);
+							shortestMain.addPath (gridPaths, adjGridPoint, point, h , w, k, rowIntPoint, colIntPoint);
+						}
+					}
+				}
+			
+				//System.out.println(gridPaths); //GRID PATHS
+				//ArrayList<AbstractMap.SimpleEntry<String, String>> testList = new ArrayList <AbstractMap.SimpleEntry<String, String>> (); 
+				//CONSTRUCTING THE REDUCTION GRAPH
+				Cell reducedGrid = new Cell (); 		
+				int gridSize = gridPaths.size(); 
+				Iterator iterator = gridPaths.entrySet().iterator();
+				//System.out.println("SIZE OF GRID PATHS : " + gridSize); 
+				int count = 0; 
+				
+				while (iterator.hasNext()) {
+
+					Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>> pair = (Map.Entry <AbstractMap.SimpleEntry<String, String>, AbstractMap.SimpleEntry<LinkedList<String>, Integer>>)iterator.next();
+				    
+					AbstractMap.SimpleEntry<String, String> stringPair = pair.getKey(); 
+					String start = stringPair.getKey(); 
+					String end = stringPair.getValue();
+
+					AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortPath = pair.getValue();
+					LinkedList<String> thePath = shortPath.getKey(); 
+					int dist = shortPath.getValue(); 
+
+					//if (start.equals("g1.4")) {
+					//	testList.add(stringPair);
+					//}
+					AbstractMap.SimpleEntry <String, Integer> adjacentVert = new AbstractMap.SimpleEntry<String, Integer>(end, dist); 
+
+					if (reducedGrid.containsKey(start)) {
+						reducedGrid.get(start).add(adjacentVert); 
+					}
+					else {
+						AdjacentList adj = new AdjacentList();
+						reducedGrid.put(start, adj); 
+						reducedGrid.get(start).add(adjacentVert); 
+					}
+					count++; 
+				}
+
+				//System.out.println("PRINTING THE COUNT : " + count);
+				//System.out.println("PRINTING REDUCED GRID WITH QUERY VERTS");
+			    //printMap(reducedGrid); 
+			    AbstractMap.SimpleEntry<LinkedList<String>, Integer> finalPath = shortestMain.dijkstra2(reducedGrid, source, goal, h, w, k);
+			    LinkedList<String> reducedList = finalPath.getKey(); 
+			    List<String> tempList = new ArrayList(reducedList);
+
+			    LinkedList<String> finalList = new LinkedList<String> ();  
+
+			    for (int x = 0; x < tempList.size() - 1; x++) {
+			    	String one = tempList.get(x);
+			    	String two = tempList.get(x+1);
+			    	AbstractMap.SimpleEntry<String, String> tempPair = new AbstractMap.SimpleEntry<String, String>(one, two); 
+			    	AbstractMap.SimpleEntry<LinkedList<String>, Integer> tempPath = gridPaths.get(tempPair);
+			    	LinkedList<String> tempPathList = tempPath.getKey(); 
+			    	for (String s : tempPathList) {
+			    		finalList.add(s); 
+			    	}
+			    }
+			    finalList = shortestMain.removeDuplicate(finalList);
+			    int finalDist = finalPath.getValue(); 
+			    System.out.println(finalDist + " " + finalList); 
+			}
+		}
+
+		catch (IOException e) {
+	    	System.out.println("Buffered reader error"); 
+		}
+	}	
+}
+
+//for (int t = 0; t < testList.size(); t++) {
+		//}
+		//System.out.println("PRINTING TEST LIST");
+		//System.out.println(testList);
+		//System.out.println("PRINTING REDUCED GRID WITHOUT QUERY VERTS");
+		//printMap(reducedGrid); 
+
+		// ADDING THE SOURCE AND GOAL VERTICES TO THE REDUCED GRAPH
+		/*
+		String[] spliced2 = new String [2];
 		String source = "";
 		String goal = ""; 
 		
@@ -703,58 +795,10 @@ public class ShortestPathsMain {
 
 							else {
 								AdjacentList adj = new AdjacentList();
-								reducedGrid.put(point, adj); 
+								reducedGrid.put(point, adj);
+								reducedGrid.get(point).add(edge);  
 							}
 						}
 					}
 				}
-			}
-	   	}
-	    catch (IOException e) {
-	    	System.out.println("Buffered reader error"); 
-	    }
-	    System.out.println("PRINTING REDUCED GRID WITH QUERY VERTS");
-	    printMap(reducedGrid); 
-	    AbstractMap.SimpleEntry<LinkedList<String>, Integer> finalPath = shortestMain.dijkstra2(reducedGrid, source, goal, h, w, k);
-	    LinkedList<String> finalList = finalPath.getKey(); 
-	    int finalDist = finalPath.getValue(); 
-	    System.out.println(finalDist + " " + finalList); 
-	}
-}
-
-
-
-		/*
-		for (int i = 0; i < gridverts.length; i++) {
-			addVertToCell2(gridPaths, gridVerts[i]);
-			addWeights2(gridPaths, gridVerts[i], h, w, k); 
-			
-		}
-		*/
-
-		/*
-		// CONSTRUCTING THE GRID-GRAPH
-		for (int i = 0; i < h; i++) {
-			for (int j = 0; j < w; j++) {
-				// for each of the grid points
-				for (int a = 0; a <= 1; a++) {
-					for (int l = 0; l <= 1; l++) {
-						String startPoint = ("g" + Integer.toString(i + a) + "." + Integer.toString(j + l));
-						// determine the shortest path to the other gridpoints 
-						for (int m = 0; m <= 1; m++) {
-							for (int n = 0; n <= 1; n++) {
-								String endPoint = ("g" + Integer.toString(i + m) + "." + Integer.toString(j + n));
-								if (!startPoint.equals(endPoint)) {
-									AbstractMap.SimpleEntry<LinkedList<String>, Integer> shortestPath = shortestMain.dijkstra(shortestMain.masterGrid, startPoint, endPoint, h, w, k, i, j); 
-									AbstractMap.SimpleEntry<String, String> vertexPair = new AbstractMap.SimpleEntry<String, String>(startPoint, endPoint);
-									gridPaths.put(vertexPair, shortestPath); 
-					   			}
-					   		}
-					    }
-				    }
-				}
-				//System.out.println("Done with cell " + Integer.toString(j));
-			}
-			//System.out.println("Done with row " + Integer.toString(i));
-		}
-		*/
+				*/

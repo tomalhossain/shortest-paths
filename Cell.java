@@ -30,4 +30,7 @@ public class Cell {
 
 	}
 
+	public boolean containsKey (String key) {
+		return this.section.containsKey(key); 
+	}
 }
