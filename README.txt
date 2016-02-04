@@ -12,7 +12,30 @@ each corner vertex has an edge to a non-corner vertex in each cell it is adjacen
 5. The graph is connected 
 6. The source and destination vertices for shortest path queries exist and are non-corner vertices in different cells.
 
-EXAMPLE IMPUT (for a graph with 4 vertices in each cell of a 2x2 grid) -  
+It is possible (even probable) that there will be more than one shortest path for the sample inputs. Only one of the shortest paths will be outputted as all of them have the same total weight.
+
+O(k3logk+p)O(k3logk+p) 
+O(k2logk+p)O(k2logk+p) solutions earn up to full credit
+
+INCLUDED IN THIS REPOSITORY - 
+
+1. 4 input files (.in) that correspond with 4 output files (.out) that serve merely as examples 
+
+2. MakeRandomGraph.java - creates an input file appropriate to for ShortestPathsMain.java. Specify the desired width (w - 1st command line arg) and height (h - 2nd command line arg) of the master grid in terms of cells and the number of desired vertices per cell (k - 3rd command line argument) EXAMPLE -  
+
+java MakeRandomGraph 2 2 4 
+
+3. ShortestPathsMain - The class which contains the main method that executes the shortest path algorithm. Specify the name of an input file as the first command line argument. EXAMPLE - 
+
+java ShortestPathsMain random_2_2_4.in
+
+4. PriorityQueue.java - A priority written by Professor Jim Glenn of Amherst College which Dijkstra's algorithm relies on to determine the next best vertex to visit to ensure traversing the shortest possible path at all times. 
+
+5. AdjacentList.java - A simple data structure that associates a given vertex with all of the vertices that it can directly reach and the weights of said edges. 
+
+6. Cell - Another simple data structure that groups individual vertices into a matrix by the row and column designations of their names. 
+
+
 
 --------------------------INPUT--------------------------
 
@@ -72,25 +95,7 @@ v0.0.0 v1.0.1
 
 15 [v1.1.3, v1.1.1, g1.2, v0.1.0, v0.1.2]
 16 [v0.0.0, v0.0.2, g1.0, v1.0.3, v1.0.1]
-Size	input	output
-k=16 (4x4 grid, 16 interior vertices per cell)	random_4_4_16.in	random_4_4_16.out
-k=64 (8x8 grid, 64 interior vertices per cell)	random_8_8_64.in	random_8_8_64.out
-k=256 (16x16 grid, 256 interior vertices per cell)	random_16_16_256.in	random_16_16_256.out
-It is possible (even probable) that there will be more than one shortest path for the sample inputs. You only need to output one of the shortest paths; it need not be the same one as in the sample output, although it should have the same total weight.
 
-Files
 
-PriorityQueue.java
-MakeRandomGraph.java
-Submissions
 
-Submit your source code files (for example, .java files or .py files) along with a printout of your source code in PDF format (2 pages per sheet if possible). All files should be bundled into an archive (zip or gzip-ed tar) and submitted through the department's electronic submission system. You do not need to include any instructor-supplied files if you did not change them. Please name your file "cosc301_proj3_user.zip" where "user" is replaced by your Amherst username (and "zip" is replaced by "tgz" if you use gzip+tar).
-Intellectual Responsibility
 
-This project is intended to practice your ability to implement an algorithm carefully rather than your ability to search the Internet. You may not examine or use existing implementations of shortest paths algorithms or graph data structures while working on this project.
-Grading
-
-Grading will be based on correctness and efficiency on inputs containing kk vertices and T(k)T(k) edges in each cell of a kv×kvk×k grid, with T(k)T(k) shortest paths queries.
-O(k3logk+p)O(k3log?k+p) solutions earn up to 90%
-O(k2logk+p)O(k2log?k+p) solutions earn up to full credit
-(pp is the total length in edges of all of the shortest paths reported).
