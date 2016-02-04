@@ -37,6 +37,9 @@ java ShortestPathsMain random_2_2_4.in
 
 
 
+
+EXAMPLE
+
 --------------------------INPUT--------------------------
 
 2 2 4
